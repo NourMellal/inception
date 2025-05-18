@@ -19,6 +19,8 @@ ARG MYSQL_USER
 ENV MYSQL_USER=${MYSQL_USER}
 ARG MYSQL_PASSWORD
 ENV MYSQL_PASSWORD=${MYSQL_PASSWORD}
+ARG MYSQL_FORCE_INIT
+ENV MYSQL_FORCE_INIT=${MYSQL_FORCE_INIT}
 
 COPY ./tools/init.sh /docker-entrypoint-initdb.d/
 RUN chmod +x /docker-entrypoint-initdb.d/init.sh

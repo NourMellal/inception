@@ -41,7 +41,7 @@ EOF
 
 # Stop temporary server
 echo "Stopping temporary server..."
-mysqladmin -uroot shutdown
+mysqladmin -uroot -p"$MYSQL_ROOT_PASSWORD" shutdown
 
 # Start main MariaDB server
 echo "Starting main MariaDB server..."
