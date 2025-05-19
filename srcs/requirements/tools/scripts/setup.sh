@@ -29,6 +29,7 @@ apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 # Add user to docker group (replace username if needed)
 echo "Adding your user to docker group..."
 usermod -aG docker $USER
+newgrp docker
 
 # Create volume directories
 echo "Creating directories for Docker volumes..."
