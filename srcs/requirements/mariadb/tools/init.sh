@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Check if database directory exists and is initialized
-if [ -d "/var/lib/mysql/mysql" ]; then
-    echo "Database already initialized, starting MariaDB..."
-    exec mysqld
-fi
+# if [ -d "/var/lib/mysql/mysql" ]; then
+#     echo "Database already initialized, starting MariaDB..."
+#     exec mysqld
+# fi
 
 # Initialize the database if it doesn't exist
 echo "Initializing fresh database..."
