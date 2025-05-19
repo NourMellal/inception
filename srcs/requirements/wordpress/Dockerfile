@@ -16,6 +16,10 @@ RUN apt update && apt install -y \
     default-mysql-client \
     netcat-openbsd
 
+# Install WP-CLI
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+    chmod +x wp-cli.phar && \
+    mv wp-cli.phar /usr/local/bin/wp
 
 RUN mkdir -p /run/php && \
     sed -i 's/listen = \/run\/php\/php8.2-fpm.sock/listen = 9000/g' /etc/php/8.2/fpm/pool.d/www.conf && \
@@ -27,7 +31,6 @@ RUN wget https://wordpress.org/latest.tar.gz && \
     rm latest.tar.gz && \
     chown -R www-data:www-data /var/www/html
 
-COPY conf/wp-config.php /var/www/html/wordpress/wp-config.php
 COPY tools/setup.sh /usr/local/bin/setup.sh
 RUN chmod +x /usr/local/bin/setup.sh
 

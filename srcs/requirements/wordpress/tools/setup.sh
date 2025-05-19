@@ -8,14 +8,48 @@ until nc -z mariadb 3306; do
 done
 
 echo "MariaDB is ready!"
+cd /var/www/html/wordpress
 
-# Install WordPress if not already installed
-if [ ! -f "/var/www/html/wordpress/.installed" ]; then
-    echo "Setting up WordPress..."
-    # Make sure WordPress has right permissions
-    chown -R www-data:www-data /var/www/html/wordpress
-    touch /var/www/html/wordpress/.installed
+# Wait for database to be fully ready
+echo "Waiting for database to be fully ready..."
+sleep 5
+
+# Check if WordPress is already configured
+if ! wp core is-installed --allow-root; then
+    echo "WordPress is not installed - performing installation"
+    
+    # Make sure wp-config.php is properly set up
+    if [ -f wp-config.php ]; then
+        echo "wp-config.php already exists"
+    else
+        echo "Creating wp-config.php"
+        wp config create --dbname="$MYSQL_DATABASE" --dbuser="$MYSQL_USER" \
+            --dbpass="$MYSQL_PASSWORD" --dbhost=mariadb --allow-root
+    fi
+    
+    echo "Installing WordPress..."
+    # Run installation as root since we have the --allow-root flag
+    wp core install \
+        --url="$WP_URL" \
+        --title="$WP_TITLE" \
+        --admin_user="$WP_ADMIN_USER" \
+        --admin_password="$WP_ADMIN_PASSWORD" \
+        --admin_email="$WP_ADMIN_EMAIL" \
+        --skip-email \
+        --allow-root
+        
+    if wp core is-installed --allow-root; then
+        echo "WordPress installation completed successfully!"
+    else
+        echo "WordPress installation failed!"
+        exit 1
+    fi
+else
+    echo "WordPress is already installed and configured."
 fi
+
+# Make sure WordPress has right permissions
+chown -R www-data:www-data /var/www/html/wordpress
 
 echo "Starting PHP-FPM..."
 # Start PHP-FPM
