@@ -1,4 +1,3 @@
-
 services:
   mariadb:
     build:
@@ -59,4 +58,14 @@ networks:
 
 volumes:
   mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/nmellal/data/mariadb
+      o: bind
   wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/nmellal/data/wordpress
+      o: bind
