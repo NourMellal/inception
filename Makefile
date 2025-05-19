@@ -1,6 +1,6 @@
 COMPOSE_FILE=./srcs/docker-compose.yml
-all:
-	docker compose -f ${COMPOSE_FILE} up
+all: build
+
 build:
 	docker compose -f ${COMPOSE_FILE} up --build -d --remove-orphans
 clean:
