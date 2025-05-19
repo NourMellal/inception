@@ -1,10 +1,10 @@
 COMPOSE_FILE=./srcs/docker-compose.yml
 all:
-	sudo docker compose -f ${COMPOSE_FILE} up
+	docker compose -f ${COMPOSE_FILE} up
 build:
-	sudo docker compose -f ${COMPOSE_FILE} up --build -d --remove-orphans
+	docker compose -f ${COMPOSE_FILE} up --build -d --remove-orphans
 clean:
-	sudo docker compose -f ${COMPOSE_FILE} down
+	docker compose -f ${COMPOSE_FILE} down
 re: clean all
 ps:
-	cd srcs && sudo docker ps -a
+	cd srcs && docker ps -a

@@ -17,7 +17,7 @@ define('LOGGED_IN_SALT',   'SKHrEK,0b:nYc,.|0YP[Qy|1Ao!yb*0f{.fSH:Pk[w399+@j@[Oy
 define('NONCE_SALT',       '5O6H gNQj7vt1+{5~C<nGPtd/jbR<y;]_CG7/7BW_9c9ibzdz7]1Id}h^u>WtA(H');
 
 $table_prefix = 'wp_';
-define('WP_DEBUG', false);
+define('WP_DEBUG', true);
 
 if (!defined('ABSPATH'))
     define('ABSPATH', dirname(__FILE__) . '/');

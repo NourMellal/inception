@@ -1,6 +1,6 @@
 FROM debian:bookworm
 
-RUN apt update && apt install -y mariadb-server
+RUN apt update && apt upgrade -y && apt install -y mariadb-server
 
 # Create necessary directories with correct permissions
 RUN mkdir -p /var/lib/mysql /var/run/mysqld /var/log/mysql && \

@@ -6,6 +6,7 @@ COPY conf/nginx.conf /etc/nginx/nginx.conf
 
 COPY tools/generate_ssl.sh /tmp/
 
+
 RUN chmod +x /tmp/generate_ssl.sh && /tmp/generate_ssl.sh
 
 EXPOSE 443
