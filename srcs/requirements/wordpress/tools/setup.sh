@@ -51,6 +51,13 @@ fi
 # Make sure WordPress has right permissions
 chown -R www-data:www-data /var/www/html/wordpress
 
+if ! wp user get "$WP_REGULAR_USER" --allow-root > /dev/null 2>&1; then
+    echo "Creating WordPress user..."
+    wp user create "$WP_REGULAR_USER" "$WP_REGULAR_EMAIL" --user_pass="$WP_REGULAR_PASSWORD" --role=author  --allow-root
+else
+    echo "WordPress user already exists."
+fi
+
 echo "Starting PHP-FPM..."
 # Start PHP-FPM
 exec php-fpm8.2 -F
