@@ -45,18 +45,22 @@ Unlike **VMs**, containers do not run a full OS—this makes them faster and mor
    * Stores all WordPress data.
    * Uses a volume for persistence: `/var/lib/mysql`
    * Set via environment variables: `MYSQL_ROOT_PASSWORD`, `MYSQL_DATABASE`, etc.
+   * Container uses an entrypoint that executes `mysqld_safe` in the foreground.
 
 2. **WordPress + PHP-FPM**
 
    * Handles PHP execution and WordPress site logic.
    * Uses `WP-CLI` in entrypoint to auto-install WordPress.
    * Needs to connect to MariaDB via internal hostname `mariadb`.
+   * PHP-FPM runs in foreground mode using `php-fpm -F` to keep the container alive properly.
+   * Uses a healthcheck script to ensure the database is ready before starting WP setup.
 
 3. **Nginx**
 
    * Handles HTTPS traffic and forwards PHP requests to WordPress.
    * Uses a **self-signed TLS certificate**.
    * Shares a volume with the WordPress container to serve static files.
+   * Configured with `daemon off;` to run in foreground and properly serve as PID 1.
 
 ### Volumes Example:
 
@@ -103,6 +107,7 @@ All services are on the same **Docker bridge network**, enabling inter-container
 * Use of `.env` files for secure and configurable environment variables
 * Avoid exposing database ports to the host — only expose Nginx 443
 * Version-pinned base images (e.g. `nginx:1.25-alpine`, not `latest`)
+* Proper startup logic: wait-for-db scripts, daemon in foreground mode
 
 ---
 
@@ -120,6 +125,8 @@ All services are on the same **Docker bridge network**, enabling inter-container
 * Be sure to add `127.0.0.1 your-login.42.fr` to `/etc/hosts`
 * All containers are built via individual Dockerfiles (no prebuilt images)
 * WordPress is installed via `wp core install` and auto-configured at startup
+* Self-signed certs are generated using `openssl req -x509 ...`
+* Database shutdown (if needed) handled using `mysqladmin -uroot -p$MYSQL_ROOT_PASSWORD shutdown`
 
 ---
 
